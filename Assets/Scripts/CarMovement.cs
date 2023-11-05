@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Rigidbody2D body;
+
+    [SerializeField] float accelerationPower;
+    [SerializeField] float steeringPower;
+
+    float steeringInput;
+    
     void Start()
     {
-        
+        body = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        steeringInput = Input.GetAxis("Horizontal");
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            body.AddForce(accelerationPower * -transform.up, ForceMode2D.Force);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            body.AddForce(accelerationPower * transform.up, ForceMode2D.Force);
+        }
+
+        body.MoveRotation(body.rotation + (-steeringInput * steeringPower));
     }
 }
