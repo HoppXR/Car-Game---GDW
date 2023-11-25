@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Barrier
   - Destroyable
+  - BoostPad
   layers:
   - Default
   - TransparentFX
