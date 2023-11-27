@@ -15,7 +15,8 @@ public class CarMovement : MonoBehaviour
     [SerializeField] float maxSpeedOffRoad;
     [SerializeField] float MaxSpeedWhileDrifting;
     [SerializeField] float maxSpeedWithBoost;
-
+    
+    [SerializeField] ParticleSystem driftParticles;
 
     float steeringInput;
     float horizontalInput;
@@ -33,6 +34,8 @@ public class CarMovement : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+
+        driftParticles.gameObject.SetActive(false);
 
         // TEMP (change later)
         canDrive = true;
@@ -98,11 +101,25 @@ public class CarMovement : MonoBehaviour
 
             if (driftActivated)
             {
+                if (driftBoostTimer > 5f)
+                {
+                    driftParticles.startColor = Color.yellow;
+                }
+                else
+                {
+                    driftParticles.startColor = Color.grey;
+                }
 
+                driftBoostTimer += 0.1f;
             }
             else
             {
+                if (driftBoostTimer > 5f)
+                {
+                    ApplySpeedBoost();
+                }
 
+                driftBoostTimer = 0;
             }
         }
         else
@@ -121,6 +138,8 @@ public class CarMovement : MonoBehaviour
         driftPower = 0.9f;
         steeringPower = 2.0f;
         driftActivated = true;
+
+        driftParticles.gameObject.SetActive(true);
     }
 
     void DeactivateDrift()
@@ -128,6 +147,8 @@ public class CarMovement : MonoBehaviour
         driftPower = 0.5f;
         steeringPower = 0.5f;
         driftActivated = false;
+
+        driftParticles.gameObject.SetActive(false);
     }
 
     void AdjustSpeedForOffroad()
